@@ -36,3 +36,23 @@ Hasil pengujian menunjukkan seluruh 4 test berhasil.
 
 ## 6. Tanggung Jawab
 Mahasiswa bertanggung jawab memahami, memeriksa, dan memastikan kebenaran kode yang digunakan dalam repository.
+
+## Bantuan AI — Tugas 1 Keamanan Komputasi dan Siber
+
+### Bagian yang dibantu AI
+AI digunakan untuk membantu menyusun dan merapikan dokumentasi keamanan GudangKu, meliputi:
+- Inventaris aset dan klasifikasi data.
+- Data Flow Diagram (DFD), ID elemen, aliran data, dan trust boundaries.
+- Identifikasi ancaman menggunakan metode STRIDE.
+- Penilaian likelihood dan impact serta pemilihan risiko prioritas.
+- Rencana kontrol keamanan untuk milestone berikutnya.
+
+### Konteks dan batasan
+Dokumentasi disusun berdasarkan kondisi prototipe GudangKu pada Tugas 1. Antarmuka menggunakan React, TypeScript, dan Tailwind CSS. Data produk masih berupa mock data, sedangkan transaksi baru disimpan sementara di React state. Komponen tanda tangan digital Ed25519 dibuat terpisah dan belum terintegrasi dengan antarmuka transaksi.
+
+Karena itu, dokumentasi tidak mengasumsikan bahwa backend, database permanen, autentikasi, atau integrasi tanda tangan digital sudah tersedia.
+
+### Verifikasi dan tanggung jawab
+AI membantu menghasilkan rancangan awal dan penjelasan dokumentasi. Saya bertanggung jawab memeriksa kesesuaian dokumen dengan implementasi GudangKu, memperbaiki ketidaksesuaian, serta menjalankan pemeriksaan dan proses Git secara mandiri.
+
+Dokumen akan diperiksa kembali melalui konsistensi ID aset dan elemen DFD, kesesuaian ancaman dengan aset yang terdampak, konsistensi penilaian risiko, dan pemeriksaan hasil Git sebelum dikumpulkan.
