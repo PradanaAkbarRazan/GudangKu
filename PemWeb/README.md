@@ -1,147 +1,128 @@
-# GudangKu — Pemrograman Web
+# GudangKu — PemWeb
 
 ## 1. Deskripsi Produk
 
 GudangKu adalah aplikasi Inventory Management & Stock Prediction yang dirancang untuk membantu toko kecil dan UMKM mengelola persediaan barang.
 
-Permasalahan yang ingin diselesaikan adalah kesulitan memantau stok, mencatat barang masuk dan keluar, serta mengetahui barang yang perlu diisi ulang.
+Aplikasi ini dikembangkan sebagai antarmuka pengelolaan inventori. Pengguna dapat melihat daftar barang, mencari barang berdasarkan nama atau kategori, melihat detail persediaan, serta membuka halaman transaksi.
 
-Pada Milestone 1, pengembangan berfokus pada antarmuka aplikasi menggunakan mock data. Integrasi database dan logika prediksi stok akan dilanjutkan pada milestone berikutnya.
+Pengembangan pada tahap ini menggunakan mock data. Integrasi database dan prediksi stok akan dikembangkan pada tahap berikutnya.
 
 ## 2. Sasaran Pengguna
 
-Pemilik toko kecil, UMKM, dan petugas inventori yang membutuhkan pencatatan persediaan secara terstruktur.
+Pemilik toko kecil, UMKM, dan petugas inventori yang membutuhkan pencatatan persediaan barang secara terstruktur.
 
-## 3. Fitur Awal
+## 3. Fitur Aplikasi
 
-- Dashboard yang menampilkan ringkasan inventori.
-- Daftar barang beserta kategori, jumlah stok, dan status persediaan.
-- Pencarian barang berdasarkan nama atau kategori.
-- Form pencatatan barang masuk dan barang keluar.
-- Validasi input dan pesan kesalahan.
-- Riwayat transaksi menggunakan mock data.
-- Tampilan responsif untuk mobile, tablet, dan desktop.
-
-Data pada Milestone 1 belum menggunakan database. Transaksi baru hanya disimpan sementara pada tampilan aplikasi.
+- Halaman utama GudangKu.
+- Daftar barang dan pencarian berdasarkan nama atau kategori.
+- Halaman detail barang berdasarkan ID.
+- Informasi stok, batas stok minimum, dan status persediaan.
+- Halaman transaksi.
+- Halaman informasi tentang aplikasi.
+- Navigasi berbasis Next.js App Router.
+- Layout, template, loading state, error boundary, dan halaman not-found.
 
 ## 4. Teknologi
 
+- Next.js 16.4.2
 - React
 - TypeScript
-- Vite
 - Tailwind CSS
-- React Router DOM
+- Next.js App Router
+- Turbopack untuk proses development dan build
 
-## 5. Struktur Aplikasi
+## 5. Peta Rute
+
+| URL | Berkas | Fungsi |
+|---|---|---|
+| `/` | `app/page.tsx` | Halaman utama |
+| `/barang` | `app/barang/page.tsx` | Daftar dan pencarian barang |
+| `/barang/[id]` | `app/barang/[id]/page.tsx` | Detail barang berdasarkan ID |
+| `/tentang` | `app/tentang/page.tsx` | Informasi aplikasi |
+| `/transaksi` | `app/transaksi/page.tsx` | Halaman transaksi |
+
+Rute detail barang menggunakan parameter dinamis `[id]`. Parameter tersebut divalidasi sebelum data barang dicari.
+
+## 6. Struktur Direktori
 
 ```text
 PemWeb/
-├── README.md
-└── app/
-    ├── public/
-    ├── src/
-    │   ├── assets/
-    │   ├── components/
-    │   ├── data/
-    │   ├── pages/
-    │   ├── App.tsx
-    │   ├── App.css
-    │   ├── index.css
-    │   └── main.tsx
-    ├── index.html
-    ├── package.json
-    ├── package-lock.json
-    └── vite.config.ts
+├── app/
+│   ├── barang/
+│   │   ├── [id]/
+│   │   ├── error.tsx
+│   │   ├── layout.tsx
+│   │   ├── loading.tsx
+│   │   ├── page.tsx
+│   │   └── template.tsx
+│   ├── tentang/
+│   ├── transaksi/
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── not-found.tsx
+│   └── page.tsx
+├── components/
+├── lib/
+├── public/
+├── eslint.config.mjs
+├── next.config.ts
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── README.md
 ```
 
-Folder `components` berisi komponen antarmuka yang digunakan ulang, `pages` berisi tiga halaman aplikasi, dan `data` berisi mock data.
+## 7. Menjalankan Aplikasi
 
-## 6. Cara Menjalankan Aplikasi
+Pastikan Node.js dan npm tersedia. Jalankan perintah berikut dari direktori `PemWeb`.
 
-### Prasyarat
+### Instalasi dependensi
 
-Pastikan Node.js dan npm sudah terpasang.
-
-### Instalasi
-
-Buka terminal pada folder utama repository, kemudian jalankan:
-
-```powershell
-cd PemWeb/app
-npm install
+```bash
+npm ci
 ```
 
-### Menjalankan aplikasi
+### Development
 
-```powershell
+```bash
 npm run dev
 ```
 
-Buka alamat lokal yang ditampilkan Vite, biasanya `http://localhost:5173/`.
+Buka `http://localhost:3000` melalui browser.
 
-### Pemeriksaan build
+### Pemeriksaan TypeScript
 
-```powershell
+```bash
+npx tsc --noEmit
+```
+
+### Pemeriksaan lint
+
+```bash
+npm run lint
+```
+
+### Build production
+
+```bash
 npm run build
 ```
 
-## 7. Pengujian Responsivitas
+### Menjalankan hasil build production
 
-Pengujian dilakukan menggunakan Chrome DevTools pada ukuran layar berikut:
+```bash
+npm run start
+```
 
-| Perangkat | Ukuran layar |
-|---|---|
-| Mobile | 390 × 844 px |
-| Tablet | 768 × 1024 px |
-| Desktop | 1366 × 900 px |
+## 8. Verifikasi Modul 4
 
-Halaman yang diuji adalah Dashboard, Daftar Barang, dan Transaksi Stok. Pengujian meliputi tampilan navigasi, kartu statistik, tabel barang, dan formulir transaksi.
+Aplikasi telah diuji menggunakan pemeriksaan TypeScript, ESLint, dan build production. Pengujian juga mencakup rute dinamis, validasi parameter, layout dan template, loading, error boundary, serta batas modul `server-only`.
 
-## 8. Pengujian Lighthouse Accessibility
+Dokumentasi lengkap dan bukti pengujian tersedia di:
 
-Pengujian dilakukan menggunakan Chrome Lighthouse dengan kategori Accessibility dan mode Navigation.
+`docs/praktikum/modul-04.md`
 
-| Halaman | Perangkat | Skor Accessibility |
-|---|---|---:|
-| Dashboard (`/`) | Desktop | 100 |
-| Daftar Barang (`/inventory`) | Desktop | 100 |
-| Transaksi Stok (`/transactions`) | Desktop | 100 |
+## 9. Catatan Pengembangan
 
-Target yang ditetapkan adalah skor Accessibility minimal 85.
-
-## Pengujian Aksesibilitas Manual
-
-Pengujian manual dilakukan menggunakan keyboard untuk memeriksa:
-- Navigasi ant halaman melalui tombol Tab.
-- Aktivasi tautan menggunakan Enter.
-- Fokus keyboard pada elemen interaktif.
-- Penggunaan input dan tombol pada formulir transaksi.
-
-Hasil pengujian:
-Navigasi dan formulir dapat digunakan menggunakan keyboard.
-
-### Kondisi Pengujian
-
-- Mode: Navigation
-- Kategori: Accessibility
-- Perangkat yang diemulasikan: Desktop
-- Versi Google Chrome: 155.0.8059.40 (Official Build) (64-bit)
-- Halaman yang diuji: Dashboard, Daftar Barang, dan Transaksi Stok
-- Tanggal pengujian: 13 Oktober 2026
-
-Versi Chrome dapat diperiksa melalui `chrome://version`. Skor di atas berdasarkan hasil pengujian yang diperoleh pada masing-masing halaman.
-
-## 9. Bukti Pengerjaan
-
-Bukti pengujian disimpan pada folder `docs/screenshot/PemWeb/` di repository GudangKu, meliputi:
-
-- Screenshot Dashboard, Daftar Barang, dan Transaksi Stok pada ukuran mobile, tablet, dan desktop.
-- Bukti formulir dengan input valid.
-- Bukti formulir dengan input tidak valid.
-- Screenshot hasil Lighthouse Accessibility.
-
-## 10. Batasan Milestone 1
-
-Versi ini berfokus pada antarmuka dan interaksi dasar. Aplikasi belum menggunakan backend atau database. Data transaksi baru masih bersifat sementara, dan prediksi stok belum menggunakan perhitungan dari riwayat transaksi.
-
-Pengembangan backend, integrasi database, serta logika prediksi akan dilanjutkan pada milestone berikutnya.
+Data aplikasi pada tahap ini masih berupa mock data dan belum terhubung ke database. Fitur pengelolaan inventori dan prediksi stok akan dikembangkan secara bertahap sesuai milestone proyek.
