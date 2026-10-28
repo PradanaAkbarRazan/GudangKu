@@ -3,12 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/PageHeader";
 import StatusBadge from "@/components/StatusBadge";
-import { mockProducts } from "@/lib/mockData";
+import { daftarBarang } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Detail Barang" };
 
 export function generateStaticParams() {
-  return mockProducts.map((product) => ({ id: product.routeId }));
+  return daftarBarang.map((product) => ({ id: product.routeId }));
 }
 
 export default async function DetailBarangPage({ params }: { params: Promise<{ id: string }> }) {
@@ -17,7 +17,7 @@ export default async function DetailBarangPage({ params }: { params: Promise<{ i
   // URL hanya menerima bilangan bulat positif tanpa nol di depan.
   if (!/^[1-9]\d*$/.test(id)) notFound();
 
-  const product = mockProducts.find((item) => item.routeId === id);
+ const product = daftarBarang.find((item) => item.routeId === id);
   if (!product) notFound();
 
   return (

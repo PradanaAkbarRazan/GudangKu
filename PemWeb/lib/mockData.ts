@@ -6,6 +6,7 @@ export type Product = {
   stock: number;
   minimumStock: number;
   unit: string;
+  tersedia?: boolean;
 };
 
 export type StockTransaction = {
