@@ -5,3 +5,11 @@ out/
 .env*
 !.env.example
 *.tsbuildinfo
+
+/generated/prisma
+
+# Local AI agent configuration and skills
+.agents/
+.claude/
+.windsurf/
+skills-lock.json

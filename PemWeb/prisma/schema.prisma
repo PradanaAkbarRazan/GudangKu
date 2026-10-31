@@ -1,0 +1,40 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum JenisPergerakan {
+  MASUK
+  KELUAR
+}
+
+model Produk {
+  id             String         @id @default(cuid())
+  kodeRute       String         @unique
+  nama           String         @unique
+  kategori       String
+  stok           Int            @default(0)
+  stokMinimum    Int            @default(0)
+  satuan         String
+  tersedia       Boolean        @default(true)
+  dibuatPada     DateTime       @default(now())
+  diperbaruiPada DateTime       @updatedAt
+
+  riwayatStok    RiwayatStok[]
+}
+
+model RiwayatStok {
+  id         String           @id @default(cuid())
+  produkId   String
+  jenis      JenisPergerakan
+  jumlah     Int
+  catatan    String?
+  dibuatPada DateTime         @default(now())
+
+produk     Produk           @relation(fields: [produkId], references: [id], onDelete: Restrict)
+}
