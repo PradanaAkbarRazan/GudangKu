@@ -1,4 +1,6 @@
+
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { connection } from "next/server";
 
 import PageHeader from "@/components/PageHeader";
@@ -9,7 +11,15 @@ export const metadata: Metadata = {
   title: "Transaksi Stok",
 };
 
-export default async function TransaksiPage() {
+export default function TransaksiPage() {
+  return (
+    <Suspense fallback={<p role="status">Memuat transaksi...</p>}>
+      <KontenTransaksi />
+    </Suspense>
+  );
+}
+
+async function KontenTransaksi() {
   await connection();
 
   const [produk, riwayat] = await Promise.all([

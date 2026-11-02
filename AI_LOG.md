@@ -56,3 +56,27 @@ Karena itu, dokumentasi tidak mengasumsikan bahwa backend, database permanen, au
 AI membantu menghasilkan rancangan awal dan penjelasan dokumentasi. Saya bertanggung jawab memeriksa kesesuaian dokumen dengan implementasi GudangKu, memperbaiki ketidaksesuaian, serta menjalankan pemeriksaan dan proses Git secara mandiri.
 
 Dokumen akan diperiksa kembali melalui konsistensi ID aset dan elemen DFD, kesesuaian ancaman dengan aset yang terdampak, konsistensi penilaian risiko, dan pemeriksaan hasil Git sebelum dikumpulkan.
+
+## Bantuan AI — Tugas 2 Pengembangan Aplikasi Web
+
+### Bagian yang dibantu AI
+
+ChatGPT digunakan sebagai alat bantu selama pengembangan Milestone 2 GudangKu, meliputi:
+
+- Memahami integrasi PostgreSQL dan Prisma ORM 7.
+- Meninjau implementasi CRUD Produk dan RiwayatStok menggunakan Server Actions.
+- Memahami dan memeriksa validasi masukan menggunakan Zod.
+- Membantu debugging Next.js App Router dan production build.
+- Membantu menyusun skenario pengujian CRUD dan relasi database.
+- Membantu menguji validasi server untuk nama barang, stok negatif, dan batas maksimum stok.
+- Membantu meninjau README dan dokumentasi pengujian.
+
+### Verifikasi dan tanggung jawab
+
+Seluruh perintah instalasi, migrasi, seed, pemeriksaan kode, pengujian aplikasi, dan production build dijalankan secara lokal.
+
+Hasil pengujian diperiksa melalui antarmuka aplikasi, PostgreSQL, Prisma Studio, dan keluaran terminal. Tiga pengujian validasi server juga diperiksa melalui browser dan dibuktikan menggunakan tangkapan layar.
+
+ChatGPT digunakan sebagai pendamping untuk penjelasan, peninjauan, debugging, dan dokumentasi. Saya bertanggung jawab memeriksa hasil implementasi serta menjalankan seluruh proses pengembangan dan pengujian.
+
+Seluruh operasi Git, termasuk commit, push, dan pembuatan tag, dilakukan secara mandiri.
