@@ -11,6 +11,7 @@
   },
   "include": [
     "Kriptografi/src/**/*.ts",
-    "Kriptografi/tests/**/*.ts"
+    "Kriptografi/tests/**/*.ts",
+    "Kriptografi/scripts/**/*.ts"
   ]
 }

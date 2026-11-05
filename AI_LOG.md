@@ -80,3 +80,24 @@ Hasil pengujian diperiksa melalui antarmuka aplikasi, PostgreSQL, Prisma Studio,
 ChatGPT digunakan sebagai pendamping untuk penjelasan, peninjauan, debugging, dan dokumentasi. Saya bertanggung jawab memeriksa hasil implementasi serta menjalankan seluruh proses pengembangan dan pengujian.
 
 Seluruh operasi Git, termasuk commit, push, dan pembuatan tag, dilakukan secara mandiri.
+
+## Tugas 2 Kriptografi — Enkripsi Terautentikasi dan Integritas Data
+
+AI digunakan sebagai asisten dalam:
+
+- Perancangan mekanisme AES-256-GCM dan HKDF-SHA256.
+- Implementasi enkripsi dan dekripsi transaksi.
+- Integrasi AES-GCM dengan digital signature Ed25519.
+- Implementasi pembacaan master key dan derivasi kunci.
+- Penyusunan automated test dan dokumentasi teknis.
+- Pemeriksaan kode dan penanganan kesalahan.
+
+Mahasiswa menjalankan, memeriksa, dan menguji implementasi secara lokal.
+
+**Hasil pengujian:**
+- 4 pengujian digital signature.
+- 7 pengujian integrasi dan keamanan.
+- 5 pengujian manajemen kunci.
+- Total 16 pengujian berhasil.
+
+Data pengujian menggunakan data sintetis. Master key disimpan di luar repository dan tidak dibagikan kepada AI.
