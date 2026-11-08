@@ -5,6 +5,7 @@ import { prisma } from "./prisma";
 import { mockProducts } from "./mockData";
 import type { Product } from "./mockData";
 import type { MasukanBarang } from "./skema";
+import { wajibLogin } from "@/lib/otorisasi";
 
 // Mengubah format data Prisma menjadi format yang digunakan UI GudangKu.
 type DataProduk = {
@@ -33,6 +34,8 @@ function ubahKeProduct(data: DataProduk): Product {
 
 // Membaca seluruh produk dari PostgreSQL.
 export async function ambilDaftarBarang(): Promise<Product[]> {
+  await wajibLogin();
+
   const produk = await prisma.produk.findMany({
     orderBy: {
       dibuatPada: "desc",
@@ -46,6 +49,8 @@ export async function ambilDaftarBarang(): Promise<Product[]> {
 export async function ambilBarang(
   routeId: string
 ): Promise<Product | null> {
+  await wajibLogin();
+
   const produk = await prisma.produk.findUnique({
     where: {
       id: routeId,

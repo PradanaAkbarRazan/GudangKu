@@ -98,3 +98,19 @@ Lima risiko prioritas GudangKu berfokus pada validasi transaksi, keterlacakan tr
 Pada Tugas 1, risiko diidentifikasi dan rencana kontrol ditetapkan. Kontrol belum dianggap diterapkan hanya karena telah direncanakan dalam dokumen. Implementasinya dilakukan pada milestone berikutnya sesuai kebutuhan produk.
 
 Register risiko ini menjadi dasar evaluasi ulang ancaman serta pelaksanaan kontrol keamanan pada Tugas 2, Tugas 3, dan Final Project.
+## Tugas 2 - Update Penerapan Kontrol
+
+| Risk ID | Status Penanganan | Kontrol dan Bukti |
+|---|---|---|
+| P-01 / T-03 | Ditangani | Validasi server-side menggunakan Zod pada operasi aplikasi |
+| P-02 / T-05 | Belum sepenuhnya ditangani | Auditd aktif pada OS, tetapi audit trail transaksi aplikasi yang mencatat identitas pelaku masih perlu dikembangkan |
+| P-03 / T-12 | Belum ditangani | Integrasi tanda tangan digital pada UI direncanakan untuk tahap berikutnya |
+| P-04 / T-01 | Mitigasi diterapkan | Argon2id, database-backed sessions, autentikasi, RBAC, dan SSH key-only |
+| P-05 / T-04 | Mitigasi diterapkan | Data menggunakan PostgreSQL dengan persistent volume |
+| T-11 | Mitigasi diterapkan | Server-side role guards, container non-root, cap_drop ALL, read-only filesystem, dan no-new-privileges |
+| T-08 | Mitigasi parsial | Environment file diabaikan Git, jaringan Docker internal, serta port aplikasi dan database tidak dipublikasikan |
+
+Catatan residual:
+- Lynis memperoleh skor 62, masih di bawah target 70.
+- Trivy melaporkan temuan HIGH dan MEDIUM.
+- Satu CRITICAL CVE-2023-45853 disimpan sebagai suppression dengan alasan triase khusus Debian Bookworm, bukan sebagai paket yang telah diperbaiki.

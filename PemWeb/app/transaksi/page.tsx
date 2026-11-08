@@ -6,6 +6,7 @@ import { connection } from "next/server";
 import PageHeader from "@/components/PageHeader";
 import TransactionsClient from "@/components/TransactionsClient";
 import { prisma } from "@/lib/prisma";
+import { wajibLogin } from "@/lib/otorisasi";
 
 export const metadata: Metadata = {
   title: "Transaksi Stok",
@@ -21,6 +22,7 @@ export default function TransaksiPage() {
 
 async function KontenTransaksi() {
   await connection();
+  await wajibLogin();
 
   const [produk, riwayat] = await Promise.all([
     prisma.produk.findMany({

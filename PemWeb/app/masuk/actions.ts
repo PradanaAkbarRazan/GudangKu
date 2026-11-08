@@ -1,10 +1,13 @@
+
 "use server";
 
 import { z } from "zod";
 import { redirect } from "next/navigation";
 
 import { skemaMasuk } from "@/lib/skema";
+import { prisma } from "@/lib/prisma";
 import { buatSesi, hapusSesi } from "@/lib/sesi";
+import { verifikasiKataSandi } from "@/lib/password";
 import type { StatusForm } from "@/lib/status-form";
 
 export async function masuk(
@@ -21,25 +24,32 @@ export async function masuk(
     };
   }
 
-  const { email, kataSandi } = hasil.data;
+  const email = hasil.data.email.trim().toLowerCase();
+  const { kataSandi } = hasil.data;
 
-  // Memeriksa kredensial akun demo.
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      passwordHash: true,
+    },
+  });
+
   if (
-    email !== process.env.DEMO_EMAIL ||
-    kataSandi !== process.env.DEMO_KATA_SANDI
+    !user ||
+    !(await verifikasiKataSandi(user.passwordHash, kataSandi))
   ) {
     return {
       pesan: "Email atau kata sandi salah.",
     };
   }
 
-  // Membuat session setelah kredensial benar.
-  await buatSesi(email);
+  await buatSesi(user.id);
 
-  redirect("/barang/tambah");
+  redirect("/barang");
 }
 
 export async function keluar() {
   await hapusSesi();
-  redirect("/");
+  redirect("/masuk");
 }

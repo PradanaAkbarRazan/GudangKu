@@ -3,6 +3,7 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 import { dataAwal } from "./data-awal";
+import { hashKataSandi } from "../lib/password";
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -15,6 +16,77 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
+
+    // Membaca kredensial akun pengujian dari environment.
+  const adminEmail = process.env.SEED_ADMIN_EMAIL
+    ?.trim()
+    .toLowerCase();
+
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD;
+
+  const petugasEmail = process.env.SEED_PETUGAS_EMAIL
+    ?.trim()
+    .toLowerCase();
+
+  const petugasPassword = process.env.SEED_PETUGAS_PASSWORD;
+
+  if (
+    !adminEmail ||
+    !adminPassword ||
+    !petugasEmail ||
+    !petugasPassword
+  ) {
+    throw new Error(
+      "Konfigurasi akun Admin dan Petugas belum lengkap."
+    );
+  }
+
+  if (
+    adminEmail === petugasEmail ||
+    adminPassword.length < 12 ||
+    petugasPassword.length < 12
+  ) {
+    throw new Error(
+      "Email harus berbeda dan password minimal 12 karakter."
+    );
+  }
+
+  // Hash password menggunakan Argon2id.
+  const [adminHash, petugasHash] = await Promise.all([
+    hashKataSandi(adminPassword),
+    hashKataSandi(petugasPassword),
+  ]);
+
+  // Membuat atau memperbarui akun Admin.
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      passwordHash: adminHash,
+      role: "ADMIN",
+    },
+    create: {
+      email: adminEmail,
+      passwordHash: adminHash,
+      role: "ADMIN",
+    },
+  });
+
+  // Membuat atau memperbarui akun Petugas.
+  await prisma.user.upsert({
+    where: { email: petugasEmail },
+    update: {
+      passwordHash: petugasHash,
+      role: "PETUGAS",
+    },
+    create: {
+      email: petugasEmail,
+      passwordHash: petugasHash,
+      role: "PETUGAS",
+    },
+  });
+
+  console.log("Seed akun Admin dan Petugas berhasil.");
+
   // Seed data produk menggunakan upsert
   const produkBerdasarkanKode = new Map<string, string>();
 

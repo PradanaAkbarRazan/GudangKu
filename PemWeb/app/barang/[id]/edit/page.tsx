@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { ambilBarang } from "@/lib/data";
 import FormEditBarang from "@/components/FormEditBarang";
+import { wajibRole } from "@/lib/otorisasi";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -12,6 +13,7 @@ type Props = {
 
 async function KontenEdit({ id }: { id: string }) {
   await connection();
+  await wajibRole("ADMIN");
 
   const barang = await ambilBarang(id);
 

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
 
 import { prisma } from "@/lib/prisma";
-import { bacaSesi } from "@/lib/sesi";
+import { wajibRole } from "@/lib/otorisasi";
 import type { StatusForm } from "@/lib/status-form";
 
 const skemaRiwayat = z.object({
@@ -101,9 +101,7 @@ export async function simpanRiwayatStok(
   _sebelumnya: StatusForm,
   formData: FormData
 ): Promise<StatusForm> {
-  if (!(await bacaSesi())) {
-    return { pesan: "Silakan masuk terlebih dahulu." };
-  }
+  await wajibRole("ADMIN", "PETUGAS");
 
   const { hasil, nilai } = bacaMasukan(formData);
 
@@ -171,9 +169,7 @@ export async function ubahRiwayatStok(
   _sebelumnya: StatusForm,
   formData: FormData
 ): Promise<StatusForm> {
-  if (!(await bacaSesi())) {
-    return { pesan: "Silakan masuk terlebih dahulu." };
-  }
+  await wajibRole("ADMIN");
 
   const { hasil, nilai } = bacaMasukan(formData);
 
@@ -277,11 +273,10 @@ export async function hapusRiwayatStok(
   _sebelumnya: StatusForm,
   _formData: FormData
 ): Promise<StatusForm> {
-  if (!(await bacaSesi())) {
-      void _sebelumnya;
+  void _sebelumnya;
   void _formData;
-    return { pesan: "Silakan masuk terlebih dahulu." };
-  }
+
+  await wajibRole("ADMIN");
 
   try {
     await prisma.$transaction(async (tx) => {

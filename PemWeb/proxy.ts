@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
   // Pemeriksaan awal: apakah cookie sesi tersedia?
-  if (!request.cookies.has("sesi")) {
+  if (!request.cookies.has("gudangku_session")) {
     return NextResponse.redirect(
       new URL("/masuk", request.url)
     );

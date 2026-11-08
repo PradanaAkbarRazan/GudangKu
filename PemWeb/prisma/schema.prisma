@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -13,28 +12,57 @@ enum JenisPergerakan {
   KELUAR
 }
 
-model Produk {
-  id             String         @id @default(cuid())
-  kodeRute       String         @unique
-  nama           String         @unique
-  kategori       String
-  stok           Int            @default(0)
-  stokMinimum    Int            @default(0)
-  satuan         String
-  tersedia       Boolean        @default(true)
-  dibuatPada     DateTime       @default(now())
-  diperbaruiPada DateTime       @updatedAt
+enum Role {
+  ADMIN
+  PETUGAS
+}
 
-  riwayatStok    RiwayatStok[]
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  passwordHash   String
+  role           Role     @default(PETUGAS)
+  dibuatPada     DateTime @default(now())
+  diperbaruiPada DateTime @updatedAt
+
+  sessions Session[]
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  tokenHash  String   @unique
+  userId     String
+  expiresAt  DateTime
+  dibuatPada DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Produk {
+  id             String   @id @default(cuid())
+  kodeRute       String   @unique
+  nama           String   @unique
+  kategori       String
+  stok           Int      @default(0)
+  stokMinimum    Int      @default(0)
+  satuan         String
+  tersedia       Boolean  @default(true)
+  dibuatPada     DateTime @default(now())
+  diperbaruiPada DateTime @updatedAt
+
+  riwayatStok RiwayatStok[]
 }
 
 model RiwayatStok {
-  id         String           @id @default(cuid())
+  id         String          @id @default(cuid())
   produkId   String
   jenis      JenisPergerakan
   jumlah     Int
   catatan    String?
-  dibuatPada DateTime         @default(now())
+  dibuatPada DateTime        @default(now())
 
-produk     Produk           @relation(fields: [produkId], references: [id], onDelete: Restrict)
+  produk Produk @relation(fields: [produkId], references: [id], onDelete: Restrict)
 }

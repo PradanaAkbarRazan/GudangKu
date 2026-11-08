@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { Prisma } from "@/generated/prisma/client";
 
 import { prisma } from "@/lib/prisma";
-import { bacaSesi } from "@/lib/sesi";
+import { wajibRole } from "@/lib/otorisasi";
 import { skemaBarang } from "@/lib/skema";
 import type { StatusForm } from "@/lib/status-form";
 
@@ -16,11 +16,7 @@ export async function simpanBarang(
   formData: FormData
 ): Promise<StatusForm> {
   // 1. Memastikan pengguna sudah login.
-  if (!(await bacaSesi())) {
-    return {
-      pesan: "Silakan masuk terlebih dahulu.",
-    };
-  }
+  await wajibRole("ADMIN");
 
   const mentah = Object.fromEntries(formData);
 
@@ -145,11 +141,7 @@ export async function ubahBarang(
   formData: FormData
 ): Promise<StatusForm> {
   // 1. Memastikan pengguna sudah login.
-  if (!(await bacaSesi())) {
-    return {
-      pesan: "Silakan masuk terlebih dahulu.",
-    };
-  }
+  await wajibRole("ADMIN");
 
   const mentah = Object.fromEntries(formData);
 
@@ -234,14 +226,10 @@ export async function hapusBarang(
   _sebelumnya: StatusForm,
   _formData: FormData
 ): Promise<StatusForm> {
-    void _sebelumnya;
+  void _sebelumnya;
   void _formData;
-  // 1. Memastikan pengguna sudah login.
-  if (!(await bacaSesi())) {
-    return {
-      pesan: "Silakan masuk terlebih dahulu.",
-    };
-  }
+
+  await wajibRole("ADMIN");
 
   try {
     // 2. Menghapus produk melalui Prisma.

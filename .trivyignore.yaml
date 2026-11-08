@@ -1,0 +1,10 @@
+﻿vulnerabilities:
+  - id: CVE-2023-45853
+    purls:
+      - "pkg:deb/debian/zlib1g"
+    expired_at: 2027-02-08
+    statement: >-
+      Debian Bookworm tracker notes that MiniZip is not built/provided
+      by the zlib package for this release. The separate minizip package
+      is fixed at 1.1-8+deb12u1. This exception is limited to Debian
+      zlib1g and must be revalidated before expiry.

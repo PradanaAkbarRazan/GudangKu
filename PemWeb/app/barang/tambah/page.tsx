@@ -2,11 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { redirect } from "next/navigation";
 
 import PageHeader from "@/components/PageHeader";
 import FormBarang from "@/components/FormBarang";
-import { bacaSesi } from "@/lib/sesi";
+import { wajibRole } from "@/lib/otorisasi";
 import { keluar } from "@/app/masuk/actions";
 
 export const metadata: Metadata = {
@@ -37,11 +36,7 @@ export default function TambahBarangPage() {
 async function KontenTambahBarang() {
   await connection();
 
-  const sesi = await bacaSesi();
-
-  if (!sesi) {
-    redirect("/masuk");
-  }
+const sesi = await wajibRole("ADMIN");
 
   return (
     <section className="max-w-2xl rounded-xl border border-slate-200 bg-white p-5 sm:p-7">
