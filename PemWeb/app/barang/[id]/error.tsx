@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 
 type ErrorBarangProps = {
   error: Error & { digest?: string };
@@ -37,7 +38,23 @@ export default function ErrorBarang({ error, retry }: ErrorBarangProps) {
         >
           Coba lagi
         </button>
-      </section>
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+  <button
+    type="button"
+    onClick={() => retry()}
+    className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+  >
+    Coba lagi
+  </button>
+
+  <Link
+    href="/barang"
+    className="font-semibold text-teal-800 underline"
+  >
+    Kembali ke daftar barang
+  </Link>
+</div>
+</section>
     </main>
   );
 }

@@ -35,6 +35,7 @@ type Props = {
 
 const kolom =
   "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm";
+  const MAX_CATATAN = 500;
 
 function BarisRiwayat({
   item,
@@ -212,7 +213,7 @@ function BarisRiwayat({
                   id={`catatan-${item.id}`}
                   name="catatan"
                   type="text"
-                  maxLength={500}
+                  maxLength={MAX_CATATAN}
                   defaultValue={
                     statusUbah.nilai?.catatan ?? item.catatan
                   }
@@ -261,7 +262,7 @@ export default function TransactionsClient({
   );
 
   const [catatan, setCatatan] = useState("");
-  const sisa = 500 - catatan.length;
+  const sisa = MAX_CATATAN - catatan.length;
 
   return (
     <div>
@@ -346,28 +347,29 @@ export default function TransactionsClient({
             </p>
           </div>
 
-          <div>
+                    <div>
             <label
               htmlFor="catatan"
               className="mb-2 block text-sm font-medium text-slate-700"
             >
               Keterangan
             </label>
-  <input
-    id="catatan"
-    name="catatan"
-    type="text"
-    maxLength={500}
-    value={catatan}
-    onChange={(event) => setCatatan(event.target.value)}
-    placeholder="Contoh: Restock dari pemasok"
-    className={kolom}
-  />
 
-  <p className="mt-1 text-sm text-slate-500">
-    {sisa} karakter tersisa
-  </p>
-</div>
+            <input
+              id="catatan"
+              name="catatan"
+              type="text"
+              maxLength={MAX_CATATAN}
+              value={catatan}
+              onChange={(event) => setCatatan(event.target.value)}
+              placeholder="Contoh: Restock dari pemasok"
+              className={kolom}
+            />
+
+            <p className="mt-1 text-sm text-slate-500">
+              {sisa} karakter tersisa
+            </p>
+          </div>
 
           {statusTambah.pesan && (
             <p

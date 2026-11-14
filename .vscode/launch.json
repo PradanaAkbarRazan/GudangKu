@@ -28,7 +28,8 @@
         "action": "debugWithChrome",
         "killOnServerStop": true,
         "pattern": "- Local:.+(https?://.+)",
-        "uriFormat": "%s"
+        "uriFormat": "%s",
+        "webRoot": "${workspaceFolder}/PemWeb"
       }
     }
   ]
