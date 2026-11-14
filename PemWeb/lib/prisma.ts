@@ -18,7 +18,10 @@ function buatClient() {
     connectionString,
   });
 
-  return new PrismaClient({ adapter });
+  return new PrismaClient({
+    adapter,
+    log: ["query", "warn", "error"],
+  });
 }
 
 export const prisma =
