@@ -260,6 +260,9 @@ export default function TransactionsClient({
     {}
   );
 
+  const [catatan, setCatatan] = useState("");
+  const sisa = 500 - catatan.length;
+
   return (
     <div>
       {/* Form Create */}
@@ -350,17 +353,21 @@ export default function TransactionsClient({
             >
               Keterangan
             </label>
+  <input
+    id="catatan"
+    name="catatan"
+    type="text"
+    maxLength={500}
+    value={catatan}
+    onChange={(event) => setCatatan(event.target.value)}
+    placeholder="Contoh: Restock dari pemasok"
+    className={kolom}
+  />
 
-            <input
-              id="catatan"
-              name="catatan"
-              type="text"
-              maxLength={500}
-              defaultValue={statusTambah.nilai?.catatan ?? ""}
-              placeholder="Contoh: Restock dari pemasok"
-              className={kolom}
-            />
-          </div>
+  <p className="mt-1 text-sm text-slate-500">
+    {sisa} karakter tersisa
+  </p>
+</div>
 
           {statusTambah.pesan && (
             <p
