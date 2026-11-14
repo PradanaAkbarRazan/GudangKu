@@ -1,4 +1,6 @@
+
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { connection } from "next/server";
 
 import PageHeader from "@/components/PageHeader";
@@ -9,7 +11,8 @@ export const metadata: Metadata = {
   title: "Transaksi Stok",
 };
 
-export default async function TransaksiPage() {
+// Seluruh data runtime diproses di dalam Suspense.
+async function KontenTransaksi() {
   await connection();
 
   const [produk, riwayat] = await Promise.all([
@@ -63,16 +66,34 @@ export default async function TransaksiPage() {
   }));
 
   return (
+    <TransactionsClient
+      produk={daftarProduk}
+      riwayat={daftarRiwayat}
+    />
+  );
+}
+
+export default function TransaksiPage() {
+  return (
     <div>
       <PageHeader
         title="Transaksi Stok"
         description="Catat barang masuk dan barang keluar."
       />
 
-      <TransactionsClient
-        produk={daftarProduk}
-        riwayat={daftarRiwayat}
-      />
+      <Suspense
+        fallback={
+          <div
+            role="status"
+            aria-live="polite"
+            className="mt-5 rounded-xl border border-slate-200 bg-white p-5 text-sm text-slate-600"
+          >
+            Memuat data transaksi stok...
+          </div>
+        }
+      >
+        <KontenTransaksi />
+      </Suspense>
     </div>
   );
 }
