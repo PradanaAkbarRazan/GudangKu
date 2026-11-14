@@ -141,17 +141,21 @@ export default function FormEditBarang({ barang }: Props) {
         </p>
       </div>
 
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
+      <div>
+        <label htmlFor="tersedia" className="block font-medium">
+          Status Ketersediaan
+        </label>
+
+        <select
+          id="tersedia"
           name="tersedia"
-          defaultChecked={
-            n ? n.tersedia === "on" : barang.tersedia === true
-          }
-          className="h-4 w-4"
-        />
-        Barang tersedia
-      </label>
+          defaultValue={n?.tersedia ?? String(barang.tersedia)}
+          className={kolom}
+        >
+          <option value="true">Tersedia</option>
+          <option value="false">Tidak tersedia</option>
+        </select>
+      </div>
 
       <button
         type="submit"
