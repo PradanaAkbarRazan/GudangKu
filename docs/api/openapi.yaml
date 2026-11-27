@@ -1,0 +1,467 @@
+openapi: 3.1.0
+
+info:
+  title: GudangKu REST API
+  version: 1.0.0
+  description: RESTful API untuk pengelolaan produk dan riwayat stok GudangKu.
+
+servers:
+  - url: http://127.0.0.1:3000
+    description: Server pengembangan lokal
+
+security: []
+
+tags:
+  - name: Barang
+    description: Operasi pengelolaan barang
+  - name: Riwayat Stok
+    description: Riwayat pergerakan stok barang
+
+paths:
+
+  /api/v1/barang:
+    get:
+      tags:
+        - Barang
+      summary: Mendapatkan daftar barang
+      operationId: daftarBarang
+      parameters:
+        - name: halaman
+          in: query
+          description: Nomor halaman
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: batas
+          in: query
+          description: Jumlah barang per halaman
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+        - name: kategori
+          in: query
+          description: Filter berdasarkan kategori
+          schema:
+            $ref: "#/components/schemas/Kategori"
+      responses:
+        "200":
+          description: Daftar barang berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HalamanBarang"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    post:
+      tags:
+        - Barang
+      summary: Menambahkan barang baru
+      operationId: tambahBarang
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BarangBaru"
+      responses:
+        "201":
+          description: Barang berhasil dibuat
+          headers:
+            Location:
+              description: URL detail barang yang baru dibuat
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Barang"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/UnprocessableContent"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/v1/barang/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdBarang"
+
+    get:
+      tags:
+        - Barang
+      summary: Mendapatkan detail barang
+      operationId: ambilDetailBarang
+      responses:
+        "200":
+          description: Detail barang berhasil ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Barang"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    patch:
+      tags:
+        - Barang
+      summary: Memperbarui sebagian data barang
+      operationId: ubahBarang
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BarangUbah"
+      responses:
+        "200":
+          description: Barang berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Barang"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/UnprocessableContent"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    delete:
+      tags:
+        - Barang
+      summary: Menghapus barang
+      description: Barang tidak dapat dihapus jika masih memiliki riwayat stok.
+      operationId: hapusBarang
+      responses:
+        "204":
+          description: Barang berhasil dihapus
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/v1/barang/{id}/riwayat-stok:
+    parameters:
+      - $ref: "#/components/parameters/IdBarang"
+
+    get:
+      tags:
+        - Riwayat Stok
+      summary: Mendapatkan riwayat stok suatu barang
+      operationId: daftarRiwayatStok
+      parameters:
+        - name: halaman
+          in: query
+          description: Nomor halaman
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: batas
+          in: query
+          description: Jumlah riwayat per halaman
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+      responses:
+        "200":
+          description: Riwayat stok berhasil diambil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HalamanRiwayatStok"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  parameters:
+    IdBarang:
+      name: id
+      in: path
+      required: true
+      description: ID barang dengan format CUID
+      schema:
+        type: string
+
+  schemas:
+    Kategori:
+      type: string
+      enum:
+        - Sembako
+        - Makanan
+        - Minuman
+        - Bahan Kue
+
+    Satuan:
+      type: string
+      enum:
+        - kg
+        - liter
+        - pcs
+        - botol
+
+    BarangBaru:
+      type: object
+      required:
+        - nama
+        - kategori
+        - stok
+        - stokMinimum
+        - satuan
+      properties:
+        nama:
+          type: string
+          minLength: 3
+          maxLength: 80
+        kategori:
+          $ref: "#/components/schemas/Kategori"
+        stok:
+          type: integer
+          minimum: 0
+          maximum: 100000
+        stokMinimum:
+          type: integer
+          minimum: 0
+          maximum: 100000
+        satuan:
+          $ref: "#/components/schemas/Satuan"
+        tersedia:
+          type: boolean
+          default: false
+
+    BarangUbah:
+      type: object
+      minProperties: 1
+      properties:
+        nama:
+          type: string
+          minLength: 3
+          maxLength: 80
+        kategori:
+          $ref: "#/components/schemas/Kategori"
+        stok:
+          type: integer
+          minimum: 0
+          maximum: 100000
+        stokMinimum:
+          type: integer
+          minimum: 0
+          maximum: 100000
+        satuan:
+          $ref: "#/components/schemas/Satuan"
+        tersedia:
+          type: boolean
+
+    Barang:
+      type: object
+      required:
+        - id
+        - kodeRute
+        - nama
+        - kategori
+        - stok
+        - stokMinimum
+        - satuan
+        - tersedia
+        - dibuatPada
+        - diperbaruiPada
+      properties:
+        id:
+          type: string
+        kodeRute:
+          type: string
+          example: PRD001
+        nama:
+          type: string
+        kategori:
+          $ref: "#/components/schemas/Kategori"
+        stok:
+          type: integer
+        stokMinimum:
+          type: integer
+        satuan:
+          $ref: "#/components/schemas/Satuan"
+        tersedia:
+          type: boolean
+        dibuatPada:
+          type: string
+          format: date-time
+        diperbaruiPada:
+          type: string
+          format: date-time
+
+    BarangRingkas:
+      type: object
+      required:
+        - id
+        - kodeRute
+        - nama
+      properties:
+        id:
+          type: string
+        kodeRute:
+          type: string
+        nama:
+          type: string
+
+    MetadataHalaman:
+      type: object
+      required:
+        - halaman
+        - batas
+        - total
+        - totalHalaman
+      properties:
+        halaman:
+          type: integer
+        batas:
+          type: integer
+        total:
+          type: integer
+        totalHalaman:
+          type: integer
+
+    HalamanBarang:
+      type: object
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Barang"
+        meta:
+          $ref: "#/components/schemas/MetadataHalaman"
+
+    JenisPergerakan:
+      type: string
+      enum:
+        - MASUK
+        - KELUAR
+
+    RiwayatStok:
+      type: object
+      required:
+        - id
+        - produkId
+        - jenis
+        - jumlah
+        - dibuatPada
+      properties:
+        id:
+          type: string
+        produkId:
+          type: string
+        jenis:
+          $ref: "#/components/schemas/JenisPergerakan"
+        jumlah:
+          type: integer
+        catatan:
+          type:
+            - string
+            - "null"
+        dibuatPada:
+          type: string
+          format: date-time
+
+    HalamanRiwayatStok:
+      type: object
+      required:
+        - produk
+        - data
+        - meta
+      properties:
+        produk:
+          $ref: "#/components/schemas/BarangRingkas"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/RiwayatStok"
+        meta:
+          $ref: "#/components/schemas/MetadataHalaman"
+
+    Problem:
+      type: object
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          default: about:blank
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+  responses:
+    BadRequest:
+      description: Permintaan tidak valid
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+
+    NotFound:
+      description: Barang tidak ditemukan
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+
+    Conflict:
+      description: Konflik data atau relasi
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+
+    UnprocessableContent:
+      description: Data tidak lolos validasi
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+
+    InternalServerError:
+      description: Kesalahan internal server
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
